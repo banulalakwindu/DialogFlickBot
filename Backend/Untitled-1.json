@@ -1,0 +1,45 @@
+{
+  "responseId": "d4c39d51-89e3-4524-9526-47d65eb0a306-1ac88cc5",
+  "queryResult": {
+    "queryText": "confirm",
+    "parameters": {},
+    "allRequiredParamsPresent": true,
+    "fulfillmentText": "Thank you shop with us.",
+    "fulfillmentMessages": [
+      {
+        "text": {
+          "text": [
+            "Thank you shop with us."
+          ]
+        }
+      }
+    ],
+    "outputContexts": [
+      {
+        "name": "projects/banu-chatbot-for-movie-se-sheu/agent/sessions/481ec6ad-1beb-5ce3-2202-2328e1952d27/contexts/confirm-order",
+        "lifespanCount": 5,
+        "parameters": {
+          "disk-type.original": "dvd",
+          "movie-item.original": "Deep Water",
+          "number.original": "two",
+          "movie-item": "Deep Water",
+          "disk-type": "DVD",
+          "number": 2
+        }
+      }
+    ],
+    "intent": {
+      "name": "projects/banu-chatbot-for-movie-se-sheu/agent/intents/c1a92752-bf26-48f6-b250-25392ecac18a",
+      "displayName": "confirm-order",
+      "endInteraction": true
+    },
+    "intentDetectionConfidence": 1,
+    "diagnosticInfo": {
+      "end_conversation": true
+    },
+    "languageCode": "en",
+    "sentimentAnalysisResult": {
+      "queryTextSentiment": {}
+    }
+  }
+}
