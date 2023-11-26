@@ -27,3 +27,21 @@ def insert_order(item, quantity, type):
         print("An error Occurred: {}".format(e))
         cnx.rollback()
         return -1
+
+
+def get_movie_info(movie):
+    try:
+        cursor = cnx.cursor(dictionary=True)
+        query = "SELECT * FROM movie WHERE mov_title = %s"
+        values = (movie,)
+        cursor.execute(query, values)
+        result = cursor.fetchone()
+        cursor.close()
+        print("Movie info retrieved successfully")
+        return result
+    except mysql.connector.Error as err:
+        print("Error retrieving movie info: {}".format(err))
+        return None
+    except Exception as e:
+        print("An error Occurred: {}".format(e))
+        return None

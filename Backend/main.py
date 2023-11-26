@@ -21,9 +21,11 @@ async def handle_request(request: Request):
     intent = payload['queryResult']['intent']['displayName']
     output_contexts = payload['queryResult']['outputContexts']
     parameters = output_contexts[0]['parameters']
+    parameters2 = payload['queryResult']['parameters']
 
     intent_handler_dict = {
-        'confirm-order': add_order
+        'confirm-order': add_order,
+        'about-movie': about_movie
     }
 
     print(intent, parameters, sep="\n")
@@ -40,6 +42,21 @@ def add_order(parameters):
             "Please place a new order again"
     else:
         fulfillment_text = f"Awesome. We have placed your order. "
+
+    return JSONResponse(content={
+        "fulfillmentText": fulfillment_text
+    })
+
+
+def about_movie(parameters):
+    movie = parameters['movie-item']
+    movie_info = db_helper.get_movie_info(movie)
+    if movie_info is None:
+        fulfillment_text = f"Sorry, we don't have any information about {movie}"
+    else:
+        fulfillment_text = f"{movie_info['mov_title']} is a {movie_info['age']} movie released in {movie_info['r_date']}. " \
+            f"IMDB rating is {movie_info['rate']}/100. " \
+            f"Story Line: \n {movie_info['s_line']}" \
 
     return JSONResponse(content={
         "fulfillmentText": fulfillment_text
