@@ -45,3 +45,23 @@ def get_movie_info(movie):
     except Exception as e:
         print("An error Occurred: {}".format(e))
         return None
+
+
+def insert_movie(movie):
+    try:
+        cursor = cnx.cursor()
+        query = "INSERT INTO request (mov_name) VALUES (%s)"
+        values = (movie,)
+        cursor.execute(query, values)
+        cnx.commit()
+        cursor.close()
+        print("Order inserted successfully")
+        return 1
+    except mysql.connector.Error as err:
+        print("Error Inserting order item: {}".format(err))
+        cnx.rollback()
+        return -1
+    except Exception as e:
+        print("An error Occurred: {}".format(e))
+        cnx.rollback()
+        return -1

@@ -3,6 +3,7 @@ from fastapi import Request
 from fastapi.responses import JSONResponse
 import re
 import db_helper
+import requests
 # import db_helper
 # import generic_helper
 
@@ -13,8 +14,9 @@ app = FastAPI()
 async def root():
     return {"message": "Hello World"}
 
-
 # Ensure this line specifies the correct URL and HTTP method
+
+
 @app.post("/")
 async def handle_request(request: Request):
     payload = await request.json()
@@ -51,10 +53,21 @@ def add_order(parameters):
 def about_movie(parameters):
     movie = parameters['movie-item']
     movie_info = db_helper.get_movie_info(movie)
+    api_key = "9998e0f2bd5fbb9af895b64d82223892"
+    api_url = f"https://api.themoviedb.org/3/search/movie?query={movie}&api_key={api_key}"
+    print(movie_info)
     if movie_info is None:
-        fulfillment_text = f"Sorry, we don't have any information about {movie}"
+        print("TMDB")
+        response = requests.get(api_url)
+        data = response.json()
+        movie_info_new = data['results'][0]
+        movie_res = db_helper.insert_movie(movie_info_new['original_title'])
+        fulfillment_text = f"This movie not found in our store. Below details I retrieved from TMDB website and I will request to admins to add this movie to store. \n {movie_info_new['original_title']} movie released in {movie_info_new['release_date']}. " \
+            f"IMDB rating is {movie_info_new['vote_average']}. " \
+            f"Story Line: \n {movie_info_new['overview']}"
     else:
-        fulfillment_text = f"{movie_info['mov_title']} is a {movie_info['age']} movie released in {movie_info['r_date']}. " \
+        print("DB")
+        fulfillment_text = f"You can buy this movie from our Store. \n {movie_info['mov_title']} is a {movie_info['age']} movie released in {movie_info['r_date']}. " \
             f"IMDB rating is {movie_info['rate']}/100. " \
             f"Story Line: \n {movie_info['s_line']}" \
 
